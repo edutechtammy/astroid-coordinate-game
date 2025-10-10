@@ -1,0 +1,286 @@
+/* Main CSS for Asteroid Coordinate Game */
+body {
+    background: #222222;
+    color: #fff;
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+
+.game-container {
+    position: relative;
+    width: 1000px;
+    height: 1100px;
+    margin: 40px auto;
+    background: #121412;
+    border-radius: 12px;
+    box-shadow: 0 0 24px #000a;
+    overflow: hidden;
+}
+
+.game-container.expanded {
+    width: 1100px;
+    background: #202220;
+}
+
+.grid-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 800px;
+    height: 800px;
+    z-index: 1;
+}
+
+.asteroid {
+    position: absolute;
+    width: 48px;
+    height: 48px;
+    z-index: 3;
+    box-shadow: 0 0 24px 8px rgba(255, 0, 0, 0.3);
+    animation: asteroid-glow 3s infinite;
+}
+
+@keyframes asteroid-glow {
+    0% {
+        box-shadow: 0 0 24px 8px rgba(255, 0, 0, 0.3);
+    }
+
+    50% {
+        box-shadow: 0 0 48px 24px rgba(255, 0, 0, 0.15);
+    }
+
+    100% {
+        box-shadow: 0 0 24px 8px rgba(255, 0, 0, 0.3);
+    }
+}
+
+.spaceship {
+    position: absolute;
+    width: 150px;
+    height: 150px;
+    z-index: 4;
+    transition: top 0.5s;
+}
+
+.highlight-x,
+.highlight-y {
+    position: absolute;
+    background: rgba(0, 128, 255, 0.1);
+    border: 2px solid rgba(0, 128, 255, 0.1);
+    z-index: 2;
+    pointer-events: none;
+}
+
+.highlight-x {
+    height: 60px;
+}
+
+.highlight-y {
+    width: 4px;
+}
+
+.input-panel {
+    position: absolute;
+    bottom: 140px;
+    left: 220px;
+    background: #222c;
+    padding: 20px 20px;
+    border-radius: 8px;
+    z-index: 10;
+    box-shadow: 0 2px 12px #000a;
+}
+
+.input-panel label {
+    margin-right: 8px;
+    font-weight: bold;
+}
+
+.input-panel input {
+    width: 48px;
+    font-size: 18px;
+    padding: 4px;
+    margin-right: 12px;
+    border-radius: 4px;
+    border: 1px solid #0080ff;
+    text-align: center;
+}
+
+.input-panel button {
+    padding: 6px 18px;
+    font-size: 16px;
+    border-radius: 4px;
+    border: none;
+    background: #0080ff;
+    color: #fff;
+    cursor: pointer;
+}
+
+.input-panel button:active {
+    background: #0050aa;
+}
+
+.status {
+    position: absolute;
+    bottom: 230px;
+    left: 220px;
+    background: #222c;
+    padding: 8px 18px;
+    border-radius: 8px;
+    font-size: 24px;
+    z-index: 10;
+    text-align: center;
+}
+
+.options-row {
+    position: absolute;
+    bottom: 80px;
+    left: 280px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 24px;
+    margin-top: 54px;
+    margin-left: 25px;
+}
+
+#sound-toggle-label {
+    display: flex;
+    align-items: center;
+    font-size: 16px;
+    margin: 0;
+}
+
+/* Energy ball effect for projectile */
+.projectile {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    /* Use a softer, multi-layered glow for energy look */
+    background: radial-gradient(circle at 60% 40%, #fff 0%, #ff5050 40%, #ff5050 60%, rgba(255, 0, 0, 0.15) 100%);
+    box-shadow:
+        0 0 24px 8px #ff5050,
+        0 0 40px 16px #fff,
+        0 0 60px 24px #ff5050,
+        0 0 80px 32px #fff;
+    z-index: 2;
+    pointer-events: none;
+    opacity: 0.85;
+    transition: left 1.2s linear, top 1.2s linear, width 0.5s, height 0.5s, box-shadow 0.5s, background 0.5s;
+}
+
+/* Energy ball building up (grow) */
+.projectile.grow {
+    width: 56px;
+    height: 56px;
+    /* Intensify the glow and add a pulsing effect */
+    background: radial-gradient(circle at 50% 50%, #fff 0%, #ff5050 30%, #ff5050 60%, rgba(255, 0, 0, 0.25) 100%);
+    box-shadow:
+        0 0 48px 24px #ff5050,
+        0 0 80px 40px #fff,
+        0 0 120px 60px #ff5050,
+        0 0 160px 80px #fff;
+    opacity: 1;
+    animation: energyPulse 1s infinite alternate;
+    transition: width 1s, height 1s, box-shadow 1s, opacity 1s, background 1s;
+}
+
+@keyframes energyPulse {
+    0% {
+        filter: brightness(1.1) saturate(1.2);
+    }
+
+    100% {
+        filter: brightness(1.4) saturate(1.6);
+    }
+}
+
+/* Explosion effect at asteroid (when projectile arrives) */
+.projectile.explode {
+    width: 120px;
+    height: 120px;
+    background: radial-gradient(circle at 50% 50%, #fff 0%, #ff5050 40%, #ff5050 70%, rgba(255, 255, 0, 0.5) 100%);
+    box-shadow:
+        0 0 120px 60px #ff5050,
+        0 0 200px 100px #fff,
+        0 0 240px 120px #ff0;
+    opacity: 0.7;
+    animation: explosionFade 0.7s forwards;
+    transition: width 0.5s, height 0.5s, box-shadow 0.5s, opacity 0.5s, background 0.5s;
+}
+
+@keyframes explosionFade {
+    0% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0;
+    }
+}
+
+.instructions-btn {
+    margin-bottom: 2px;
+    font-size: 16px;
+    padding: 8px 18px;
+    border-radius: 6px;
+    border: none;
+    background: #0080ff;
+    color: #fff;
+    cursor: pointer;
+    font-weight: bold;
+    box-shadow: 0 2px 8px #0002;
+}
+
+.instructions-modal {
+    position: fixed;
+    top: 40%;
+    left: 45%;
+    transform: translate(-50%, -50%);
+    background: #222c;
+    color: #fff;
+    border-radius: 12px;
+    box-shadow: 0 0 32px #000a;
+    padding: 32px 40px;
+    z-index: 100;
+    min-width: 320px;
+    max-width: 90vw;
+    outline: none;
+}
+
+.close-instructions {
+    margin-top: 24px;
+    font-size: 16px;
+    padding: 8px 18px;
+    border-radius: 6px;
+    border: none;
+    background: #0080ff;
+    color: #fff;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.prompt {
+    font-size: 1.8em;
+    font-weight: 500;
+    color: #a8c2e2;
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+/* Flexbox container for input and options */
+.input-area {
+    display: flex;
+    /* enables flexbox layout */
+    flex-direction: column;
+    /* stacks children vertically */
+    align-items: center;
+    /* centers children horizontally */
+    gap: 16px;
+    /* space between input panel and options row */
+    margin-top: 32px;
+}

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=800, initial-scale=1.0">
+    <title>Asteroid Coordinate Game</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="game-container expanded" role="main" aria-label="Asteroid Coordinate Game">
+        <img src="assets/grid.png" class="grid-bg" alt="Cartesian coordinate grid with labeled axes and grid points">
+        <img id="asteroid" src="assets/asteroid4.png" class="asteroid" alt="Asteroid graphic positioned on the grid" style="display:none;">
+        <img id="spaceship" src="assets/nightraider2_0.png" class="spaceship" alt="Spaceship graphic facing the asteroid" style="display:none;">
+        <div id="highlight-x" class="highlight-x" style="display:none;" aria-hidden="true"></div>
+        <div id="highlight-y" class="highlight-y" style="display:none;" aria-hidden="true"></div>
+        <div id="projectile" class="projectile" style="display:none;" aria-hidden="true"></div>
+            <!-- Flexbox container for input and options -->
+            <div class="input-area">
+                <!-- Input panel for coordinates -->
+                <div class="input-panel" role="form" aria-label="Coordinate input panel">
+                    <div class="prompt" id="prompt" role="status" aria-live="polite">What position is the asteroid in?</div>
+                    <label for="x-input">X:</label>
+                    <input type="number" id="x-input" min="-5" max="5" aria-label="X coordinate input">
+                    <label for="y-input">Y:</label>
+                    <input type="number" id="y-input" min="-10" max="10" aria-label="Y coordinate input">
+                    <button id="submit-btn" aria-label="Submit coordinates">Submit</button>
+                </div>
+                <!-- Options row for sound and instructions -->
+                <div class="options-row" role="group" aria-label="Game options">
+                    <label id="sound-toggle-label"><input type="checkbox" id="sound-toggle" checked aria-label="Toggle sound on or off"> Sound On</label>
+                    <button id="instructions-btn" class="instructions-btn" aria-haspopup="dialog" aria-controls="instructions-modal" aria-label="Open instructions">Instructions</button>
+                </div>
+            </div>
+        <div id="instructions-modal" class="instructions-modal" role="dialog" aria-modal="true" aria-labelledby="instructions-title" tabindex="-1" style="display:none;">
+            <h2 id="instructions-title">Game Instructions & Keyboard Navigation</h2>
+            <p><strong>Game Instructions:</strong></p>
+            <ul>
+                <li>An asteroid will appear at a random position on the coordinate grid.</li>
+                <li>Enter the X and Y coordinates of the asteroid in the input boxes.</li>
+                <li>Press Submit to check your answer.</li>
+                <li>If correct, the spaceship will move and fire at the asteroid, destroying it.</li>
+                <li>If incorrect, try again until you get both coordinates right.</li>
+                <li>You can toggle sound on or off using the checkbox.</li>
+            </ul>
+            <p><strong>Keyboard Controls:</strong></p>
+            <ul>
+                <li>Use <strong>Tab</strong> to move between input fields and buttons.</li>
+                <li>Enter your X and Y answers using the keyboard.</li>
+                <li>Press <strong>Enter</strong> or <strong>Space</strong> on the Submit button to check your answer.</li>
+                <li>Press <strong>Escape</strong> to close this instructions window.</li>
+                <li>Use the Sound On checkbox to toggle game sounds.</li>
+            </ul>
+            <button id="close-instructions" class="close-instructions" aria-label="Close instructions dialog">Close</button>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>

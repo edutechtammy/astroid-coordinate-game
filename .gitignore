@@ -1,0 +1,20 @@
+# macOS system files
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# macOS folder attributes
+__MACOSX/
+
+# VS Code settings
+.vscode/
+
+# Node modules (if ever used)
+node_modules/
+
+# Log files
+*.log
+
+# Other system files
+Thumbs.db
+Desktop.ini
