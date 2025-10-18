@@ -152,73 +152,83 @@ body {
     margin: 0;
 }
 
-/* Energy ball effect for projectile */
+/* Simple projectile - clean slate for new animation */
 .projectile {
     position: absolute;
     left: 0;
     top: 0;
-    width: 22px;
-    height: 22px;
+    width: 32px;
+    height: 32px;
     border-radius: 50%;
-    /* Use a softer, multi-layered glow for energy look */
-    background: radial-gradient(circle at 60% 40%, #fff 0%, #ff5050 40%, #ff5050 60%, rgba(255, 0, 0, 0.15) 100%);
-    box-shadow:
-        0 0 24px 8px #ff5050,
-        0 0 40px 16px #fff,
-        0 0 60px 24px #ff5050,
-        0 0 80px 32px #fff;
+    background: #ff5050;
     z-index: 2;
     pointer-events: none;
-    opacity: 0.85;
-    transition: left 1.2s linear, top 1.2s linear, width 0.5s, height 0.5s, box-shadow 0.5s, background 0.5s;
+    opacity: 0;
+    /* Start invisible */
+    transition: left 0.5s linear, top 0.5s linear, opacity 0.3s ease, box-shadow 0.3s ease;
 }
 
-/* Energy ball building up (grow) */
-.projectile.grow {
-    width: 56px;
-    height: 56px;
-    /* Intensify the glow and add a pulsing effect */
-    background: radial-gradient(circle at 50% 50%, #fff 0%, #ff5050 30%, #ff5050 60%, rgba(255, 0, 0, 0.25) 100%);
-    box-shadow:
-        0 0 48px 24px #ff5050,
-        0 0 80px 40px #fff,
-        0 0 120px 60px #ff5050,
-        0 0 160px 80px #fff;
+/* Charging glow effect - about half spaceship height (~37px radius) */
+.projectile.charging {
     opacity: 1;
-    animation: energyPulse 1s infinite alternate;
-    transition: width 1s, height 1s, box-shadow 1s, opacity 1s, background 1s;
+    box-shadow:
+        0 0 20px 8px #ff5050,
+        0 0 40px 16px rgba(255, 80, 80, 0.6),
+        0 0 74px 30px rgba(255, 80, 80, 0.3);
+    animation: chargePulse 0.5s ease-in-out infinite alternate;
 }
 
-@keyframes energyPulse {
+@keyframes chargePulse {
     0% {
-        filter: brightness(1.1) saturate(1.2);
+        box-shadow:
+            0 0 20px 8px #ff5050,
+            0 0 40px 16px rgba(255, 80, 80, 0.6),
+            0 0 74px 30px rgba(255, 80, 80, 0.3);
     }
 
     100% {
-        filter: brightness(1.4) saturate(1.6);
+        box-shadow:
+            0 0 30px 12px #ff5050,
+            0 0 60px 24px rgba(255, 80, 80, 0.8),
+            0 0 74px 30px rgba(255, 80, 80, 0.5);
     }
 }
 
-/* Explosion effect at asteroid (when projectile arrives) */
-.projectile.explode {
-    width: 120px;
-    height: 120px;
-    background: radial-gradient(circle at 50% 50%, #fff 0%, #ff5050 40%, #ff5050 70%, rgba(255, 255, 0, 0.5) 100%);
+/* Travel phase - maintains peak intensity without pulsing */
+.projectile.traveling {
+    opacity: 1;
     box-shadow:
-        0 0 120px 60px #ff5050,
-        0 0 200px 100px #fff,
-        0 0 240px 120px #ff0;
-    opacity: 0.7;
-    animation: explosionFade 0.7s forwards;
-    transition: width 0.5s, height 0.5s, box-shadow 0.5s, opacity 0.5s, background 0.5s;
+        0 0 30px 12px #ff5050,
+        0 0 60px 24px rgba(255, 80, 80, 0.8),
+        0 0 74px 30px rgba(255, 80, 80, 0.5);
 }
 
-@keyframes explosionFade {
+/* Explosion phase - massive brief glow burst */
+.projectile.exploding {
+    opacity: 1;
+    width: 64px;
+    height: 64px;
+    box-shadow:
+        0 0 80px 40px #ff5050,
+        0 0 120px 60px rgba(255, 80, 80, 0.9),
+        0 0 160px 80px rgba(255, 255, 0, 0.6),
+        0 0 200px 100px rgba(255, 255, 255, 0.4);
+    animation: explosionBurst 0.3s ease-out forwards;
+}
+
+@keyframes explosionBurst {
     0% {
+        transform: scale(1);
         opacity: 1;
     }
 
+    50% {
+        transform: scale(1.5);
+        opacity: 0.8;
+    }
+
     100% {
+        transform: scale(2);
         opacity: 0;
     }
 }

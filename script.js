@@ -112,48 +112,57 @@ document.addEventListener('DOMContentLoaded', function () {
         }
         if (correct) {
             updateStatus('Great job! Asteroid destroyed!');
-            playAudio('ar/35529.mp3');
             // Move spaceship to asteroid's y position
             spaceship.style.top = (GRID_ORIGIN_Y - asteroidY * GRID_SIZE - 75) + 'px';
             removeHighlights();
             score++;
-            // Wait for spaceship to finish moving, then fire projectile
+            // Wait for spaceship to finish moving, then start firing sequence
             setTimeout(() => {
+                // Phase 1: Charge up - play charge sound
+                playAudio('ar/charge.wav');
+
                 const projectile = document.getElementById('projectile');
-                // Start at spaceship tip (left side)
-                const startX = 850 - 32; // spaceship left - projectile radius
-                const startY = parseInt(spaceship.style.top) + 75 - 16 - 5; // nudged up by 5px
+                // Calculate target position (asteroid center)
+                const asteroidCenterX = GRID_ORIGIN_X + asteroidX * GRID_SIZE;
+                const asteroidCenterY = GRID_ORIGIN_Y - asteroidY * GRID_SIZE;
+
+                // Start projectile at spaceship position
+                const startX = 850 - 16; // spaceship front
+                const startY = parseInt(spaceship.style.top) + 75 - 16; // spaceship center
+
+                // Position projectile at spaceship (initially invisible)
                 projectile.style.left = startX + 'px';
                 projectile.style.top = startY + 'px';
                 projectile.style.display = 'block';
-                projectile.classList.add('grow');
-                // Grow for 0.7s, then move to asteroid
+
+                // Start charging effect - projectile becomes visible with glow
+                projectile.classList.add('charging');
+
+                // Phase 2: After charge completes, fire projectile
                 setTimeout(() => {
-                    projectile.classList.remove('grow');
-                    // Move to asteroid center very fast
-                    const asteroidWidth = 48; // asteroid graphic width
-                    const asteroidHeight = 48; // asteroid graphic height
-                    const endX = GRID_ORIGIN_X + asteroidX * GRID_SIZE - asteroidWidth / 2;
-                    const endY = GRID_ORIGIN_Y - asteroidY * GRID_SIZE - asteroidHeight / 2;
-                    projectile.style.transition = 'left 0.7s linear, top 0.7s linear, width 0.5s, height 0.5s, box-shadow 0.5s, background 0.5s';
-                    projectile.style.left = endX + 'px';
-                    projectile.style.top = endY + 'px';
-                    // After travel, grow again for explosion
+                    // Remove charging effect and add traveling effect
+                    projectile.classList.remove('charging');
+                    projectile.classList.add('traveling');
+                    playAudio('ar/fire.wav'); // Play firing sound
+                    projectile.style.left = (asteroidCenterX - 16) + 'px';
+                    projectile.style.top = (asteroidCenterY - 16) + 'px';
+
+                    // Phase 3: When projectile reaches target, explode
                     setTimeout(() => {
-                        projectile.classList.add('grow');
-                        // Add explosion effect
+                        projectile.classList.remove('traveling');
+                        projectile.classList.add('exploding');
+                        playAudio('ar/explosion.wav'); // Play explosion sound
+
+                        // Hide projectile after explosion animation completes
                         setTimeout(() => {
-                            projectile.classList.remove('grow');
-                            projectile.classList.add('explode');
-                            // Remove projectile after explosion animation
-                            setTimeout(() => {
-                                projectile.style.display = 'none';
-                                projectile.classList.remove('explode');
-                                projectile.style.transition = 'left 1.2s linear, top 1.2s linear, width 0.5s, height 0.5s, box-shadow 0.5s, background 0.5s';
-                            }, 700); // explosion animation duration
-                        }, 300); // time to reach asteroid and start explosion
-                    }, 300);
-                }, 2500);
+                            projectile.classList.remove('exploding');
+                            projectile.style.display = 'none';
+                            // Reset projectile size for next use
+                            projectile.style.width = '32px';
+                            projectile.style.height = '32px';
+                        }, 300); // matches explosion animation duration
+                    }, 500); // time for projectile to travel
+                }, 1000); // charge time - adjust based on charge.wav duration
             }, 500); // Wait for spaceship to finish moving
             setTimeout(() => {
                 asteroid.style.display = 'none';

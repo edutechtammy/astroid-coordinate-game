@@ -1,7 +1,6 @@
 ## Known Issues
-- While game play is in place, some minor fixes and improvements are still needed.
-- Projectile animation timing to match the audio effect needs further adjustment.
-- Not all accessibility enhancements have been added.
+- While gameplay is fully functional, some minor improvements could still be added.
+- Additional accessibility enhancements could be implemented.
 - Please report any bugs or suggestions via GitHub Issues.
 
 # Asteroid Coordinate Game
@@ -11,7 +10,8 @@ An interactive HTML5 game for practicing Cartesian coordinates. Students identif
 ## Features
 - Random asteroid placement on a Cartesian grid
 - Visual cues to help identify coordinates
-- Animated spaceship and firing sequence
+- **Three-phase firing animation:** charge buildup, projectile travel, and explosion burst
+- **Audio-visual synchronization:** separate audio files for each animation phase (charge, fire, explosion)
 - Audio feedback for correct and incorrect answers
 - Accessibility: keyboard navigation, ARIA labels, alt text, instructions modal
 - Option to toggle sound on/off
@@ -35,8 +35,12 @@ An interactive HTML5 game for practicing Cartesian coordinates. Students identif
 - `index.html` — Main game markup
 - `style.css` — Game styles and animations
 - `script.js` — Game logic and interactivity
-- `assets/` — Images and graphics
-- `ar/` — Audio files
+- `assets/` — Images and graphics (asteroid, spaceship, grid)
+- `ar/` — Audio files:
+  - `charge.wav` — Energy buildup sound for projectile charging
+  - `fire.wav` — Projectile travel sound
+  - `explosion.wav` — Asteroid destruction sound
+  - `incorrect.wav` — Wrong answer feedback
 
 ## Customization
 - Replace asteroid and spaceship images in `assets/` for different themes
